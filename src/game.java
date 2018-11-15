@@ -40,19 +40,18 @@ public class game {
 			} else if (cmd.equals("EXIT")) {
 				exit = true;
 			} else if (cmd.equals("RESET")) {
+				
 				// Reset board/game.
 				isPlayer1 = true;
 				plays = new ArrayList<Integer>();
 				setupGame();
-			} else if (won || invalidPaths == 10) {
+			} else if (won || invalidPaths == 10) {  // If the game is over, tell user.
 				System.out.println("THE GAME IS OVER, ENTER \"RESET\" IF YOU WANT TO PLAY AGAIN.");
 			} else if (cmd.contains("PUT")) {
 				
 				// Setup the values being passed to placeToken.
 				int col = 0;
-				
-				// Use try/catch to handle potential parseInt exception
-				try {
+				try {  // Use try/catch to handle potential parseInt exception
 					col = Integer.parseInt(cmd.substring(4)) - 1;
 				} catch (NumberFormatException e) {
 					System.out.println("INVALID COMMAND");
@@ -105,7 +104,7 @@ public class game {
 					break;
 				}
 			}
-			won = !diagHasZero && !diagLeftRight;
+			won = !diagHasZero && !diagLeftRight;  // if the diag solely consists of currPlayer, the game is won.
 		}
 		if (!won && row + col == 3 && !diagRightLeft) {  // check bottom left -> top right
 			boolean diagHasZero = false;  // Stores if there is a zero in the diagonal.
@@ -118,7 +117,7 @@ public class game {
 					break;
 				}
 			}
-			won = !diagHasZero && !diagRightLeft;
+			won = !diagHasZero && !diagRightLeft;  // if the diag solely consists of currPlayer, the game is won.
 		}
 		
 		// Check column where token was inserted
@@ -130,7 +129,7 @@ public class game {
 					break;
 				}
 			}
-			won = row == 0 && !cols[col];
+			won = row == 0 && !cols[col];  // if the col solely consists of currPlayer, the game is won.
 		}
 		
 		// Check row where token was inserted
@@ -145,7 +144,7 @@ public class game {
 					break;
 				}
 			}
-			won = !rowHasZero && !rows[row];
+			won = !rowHasZero && !rows[row];  // if the row solely consists of currPlayer, the game is won.
 		}
 	}
 	
