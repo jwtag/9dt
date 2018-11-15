@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -15,13 +17,62 @@ public class game {
 	private static boolean[] cols;
 	private static boolean[] rows;
 	
+	// Stores number of invalid paths to a win.  Once equal to 10, game is a draw.
+	private static int invalidPaths;
+	
 	// Stores if game is won.
 	private static boolean won;
 	
 	public static void main(String[] args) {
 		setupGame();
+		List<Integer> plays = new ArrayList<Integer>();  // Stores all of the plays so far.
 		Scanner input = new Scanner(System.in);
-		
+		boolean isPlayer1 = true;  // Stores if it is player 1's turn
+		boolean exit = false;  // Stores if exit has been called.
+		while (!exit) {
+			String cmd = input.nextLine();
+			if (cmd.equals("GET")) {
+				for (Integer i : plays) {
+					System.out.println(i);
+				}
+			} else if (cmd.equals("BOARD")) {
+				printBoard();
+			} else if (cmd.equals("EXIT")) {
+				exit = true;
+			} else if (cmd.contains("PUT")) {
+				
+				// Setup the values being passed to placeToken.
+				int col = Integer.parseInt(cmd.substring(4)) - 1;
+				int currPlayer = 1;
+				if (isPlayer1 == false) currPlayer = 2;
+				
+				// Attempt to place the token, print ERROR if failure.
+				if (!placeToken(col, currPlayer)) {
+					System.out.println("ERROR");
+					isPlayer1 = !isPlayer1;  // Offset current player so the current player can input again.
+				} else {
+					
+					// Endgame conditions. Print result and reset.
+					if (won || invalidPaths == 10) {
+						
+						// Print result.
+						if (won) System.out.println("WIN");
+						if (invalidPaths == 10) System.out.println("DRAW");
+						
+						// Reset board/game.
+						isPlayer1 = false;
+						//plays = new ArrayList<Integer>();
+						//setupGame();
+					} else {
+						System.out.println("OK");
+						plays.add(col);
+					}
+				}
+			} else {
+				System.out.println("INVALID COMMAND!  TRY AGAIN.");
+			}
+			isPlayer1 = !isPlayer1;
+		}
 		input.close();
 	}
 	
@@ -32,6 +83,7 @@ public class game {
 	 * @param currPlayer The player placing the token.
 	 */
 	private static void updateBooleans(int row, int col, int currPlayer) {
+		
 		// Check diagonals (if applicable)
 		if (row == col && !diagLeftRight) {  // check top left -> bottom right
 			boolean diagHasZero = false;  // Stores if
@@ -40,6 +92,7 @@ public class game {
 					diagHasZero = true;
 				} else if (board[i][i] != currPlayer) {
 					diagLeftRight = true;
+					invalidPaths++;
 					break;
 				}
 			}
@@ -52,29 +105,34 @@ public class game {
 					diagHasZero = true;
 				} else if (board[3 - i][i] != currPlayer) {
 					diagRightLeft = true;
+					invalidPaths++;
 					break;
 				}
 			}
 			won = !diagHasZero && !diagRightLeft;
 		}
+		
 		// Check column where token was inserted
 		if (!won && !cols[col]) {
 			for (int i = 0; i < row; i++) {
-				if (board[row][col] != currPlayer && board[row][col] != 0) {
+				if (board[i][col] != currPlayer && board[i][col] != 0) {
 					cols[col] = true;
+					invalidPaths++;
 					break;
 				}
 			}
 			won = row == 4 && !cols[col];
 		}
+		
 		// Check row where token was inserted
 		if (!won && !rows[row]) {
 			boolean rowHasZero = false;  // Stores if
-			for (int i = 0; i < col; i++) {
-				if (board[row][col] == 0) {
+			for (int i = 0; i < 4; i++) {
+				if (board[row][i] == 0) {
 					rowHasZero = true;
-				} else if (board[row][col] != currPlayer) {
+				} else if (board[row][i] != currPlayer) {
 					rows[row] = true;
+					invalidPaths++;
 					break;
 				}
 			}
@@ -119,7 +177,7 @@ public class game {
 	}
 	
 	/**
-	 * Sets up the default values of the game.
+	 * Sets up the values used to run the game.
 	 */
 	private static void setupGame() {
 		 board = new int[4][4];
@@ -128,5 +186,6 @@ public class game {
 		 cols = new boolean[4];
 		 rows = new boolean[4];
 		 won = false;
+		 invalidPaths = 0;
 	}
 }
