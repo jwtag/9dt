@@ -78,7 +78,7 @@ public class game {
 						isPlayer1 = !isPlayer1;
 					}
 				}
-			} else {
+			} else {  // Command passed was invalid.
 				System.out.println("INVALID COMMAND!  TRY AGAIN.");
 			}
 		}
@@ -95,11 +95,11 @@ public class game {
 		
 		// Check diagonals (if applicable)
 		if (row == col && !diagLeftRight) {  // check top left -> bottom right
-			boolean diagHasZero = false;  // Stores if
+			boolean diagHasZero = false;  // Stores if there is a zero in the diagonal.
 			for (int i = 0; i < 4; i++) {
-				if (board[i][i] == 0) {
+				if (board[i][i] == 0) {  // Check for zero.
 					diagHasZero = true;
-				} else if (board[i][i] != currPlayer) {
+				} else if (board[i][i] != currPlayer) {  // Check if other player is present.
 					diagLeftRight = true;
 					invalidPaths++;
 					break;
@@ -108,11 +108,11 @@ public class game {
 			won = !diagHasZero && !diagLeftRight;
 		}
 		if (!won && row + col == 3 && !diagRightLeft) {  // check bottom left -> top right
-			boolean diagHasZero = false;  // Stores if
+			boolean diagHasZero = false;  // Stores if there is a zero in the diagonal.
 			for (int i = 0; i < 4; i++) {
-				if (board[3 - i][i] == 0) {
+				if (board[3 - i][i] == 0) {  // Check for zero.
 					diagHasZero = true;
-				} else if (board[3 - i][i] != currPlayer) {
+				} else if (board[3 - i][i] != currPlayer) {  // Check if other player is present.
 					diagRightLeft = true;
 					invalidPaths++;
 					break;
@@ -135,11 +135,11 @@ public class game {
 		
 		// Check row where token was inserted
 		if (!won && !rows[row]) {
-			boolean rowHasZero = false;  // Stores if
+			boolean rowHasZero = false;  // Stores if there is a zero in the row
 			for (int i = 0; i < 4; i++) {
-				if (board[row][i] == 0) {
+				if (board[row][i] == 0) {  // Check for zero.
 					rowHasZero = true;
-				} else if (board[row][i] != currPlayer) {
+				} else if (board[row][i] != currPlayer) {  // Check if other player is present.
 					rows[row] = true;
 					invalidPaths++;
 					break;
@@ -172,7 +172,7 @@ public class game {
 	}
 	
 	/**
-	 * Prints board in a format specified as in the spec.
+	 * Prints board in the format specified in the spec.
 	 */
 	private static void printBoard() {
 		for (int[] row : board) {
