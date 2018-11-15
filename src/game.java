@@ -29,7 +29,7 @@ public class game {
 		Scanner input = new Scanner(System.in);
 		boolean isPlayer1 = true;  // Stores if it is player 1's turn
 		boolean exit = false;  // Stores if exit has been called.
-		while (!exit) {
+		while (!exit  && input.hasNextLine()) {
 			String cmd = input.nextLine();
 			if (cmd.equals("GET")) {
 				for (Integer i : plays) {
