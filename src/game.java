@@ -73,7 +73,7 @@ public class game {
 						if (invalidPaths == 10) System.out.println("DRAW");
 					} else {
 						System.out.println("OK");
-						plays.add(col);
+						plays.add(col + 1);
 						isPlayer1 = !isPlayer1;
 					}
 				}
