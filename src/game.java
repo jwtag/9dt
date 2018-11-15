@@ -65,6 +65,8 @@ public class game {
 				if (!placeToken(col, currPlayer)) {
 					System.out.println("ERROR");
 				} else {
+					plays.add(col + 1);
+					
 					// Endgame conditions. Print result and reset.
 					if (won || invalidPaths == 10) {
 						
@@ -73,7 +75,6 @@ public class game {
 						if (invalidPaths == 10) System.out.println("DRAW");
 					} else {
 						System.out.println("OK");
-						plays.add(col + 1);
 						isPlayer1 = !isPlayer1;
 					}
 				}
