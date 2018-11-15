@@ -39,6 +39,13 @@ public class game {
 				printBoard();
 			} else if (cmd.equals("EXIT")) {
 				exit = true;
+			} else if (cmd.equals("RESET")) {
+				// Reset board/game.
+				isPlayer1 = true;
+				plays = new ArrayList<Integer>();
+				setupGame();
+			} else if (won || invalidPaths == 10) {
+				System.out.println("GAME OVER");
 			} else if (cmd.contains("PUT")) {
 				
 				// Setup the values being passed to placeToken.
@@ -64,11 +71,6 @@ public class game {
 						// Print result.
 						if (won) System.out.println("WIN");
 						if (invalidPaths == 10) System.out.println("DRAW");
-						
-						// Reset board/game.
-						isPlayer1 = true;
-						plays = new ArrayList<Integer>();
-						setupGame();
 					} else {
 						System.out.println("OK");
 						plays.add(col);
