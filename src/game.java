@@ -45,7 +45,7 @@ public class game {
 				plays = new ArrayList<Integer>();
 				setupGame();
 			} else if (won || invalidPaths == 10) {
-				System.out.println("GAME OVER");
+				System.out.println("THE GAME IS OVER, ENTER \"RESET\" IF YOU WANT TO PLAY AGAIN.");
 			} else if (cmd.contains("PUT")) {
 				
 				// Setup the values being passed to placeToken.
