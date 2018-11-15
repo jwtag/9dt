@@ -179,7 +179,7 @@ public class game {
 			}
 			System.out.println();
 		}
-		System.out.print("+--------\n  1 2 3 4");
+		System.out.print("+--------\n  1 2 3 4\n");
 	}
 	
 	/**
