@@ -42,16 +42,22 @@ public class game {
 			} else if (cmd.contains("PUT")) {
 				
 				// Setup the values being passed to placeToken.
-				int col = Integer.parseInt(cmd.substring(4)) - 1;
+				int col = 0;
+				
+				// Use try/catch to handle potential parseInt exception
+				try {
+					col = Integer.parseInt(cmd.substring(4)) - 1;
+				} catch (NumberFormatException e) {
+					System.out.println("INVALID COMMAND");
+					continue;
+				}
 				int currPlayer = 1;
 				if (isPlayer1 == false) currPlayer = 2;
 				
 				// Attempt to place the token, print ERROR if failure.
 				if (!placeToken(col, currPlayer)) {
 					System.out.println("ERROR");
-					isPlayer1 = !isPlayer1;  // Offset current player so the current player can input again.
 				} else {
-					
 					// Endgame conditions. Print result and reset.
 					if (won || invalidPaths == 10) {
 						
@@ -60,18 +66,18 @@ public class game {
 						if (invalidPaths == 10) System.out.println("DRAW");
 						
 						// Reset board/game.
-						isPlayer1 = false;
-						//plays = new ArrayList<Integer>();
-						//setupGame();
+						isPlayer1 = true;
+						plays = new ArrayList<Integer>();
+						setupGame();
 					} else {
 						System.out.println("OK");
 						plays.add(col);
+						isPlayer1 = !isPlayer1;
 					}
 				}
 			} else {
 				System.out.println("INVALID COMMAND!  TRY AGAIN.");
 			}
-			isPlayer1 = !isPlayer1;
 		}
 		input.close();
 	}
@@ -114,14 +120,14 @@ public class game {
 		
 		// Check column where token was inserted
 		if (!won && !cols[col]) {
-			for (int i = 0; i < row; i++) {
-				if (board[i][col] != currPlayer && board[i][col] != 0) {
+			for (int i = row; i < 4; i++) {
+				if (board[i][col] != currPlayer) {
 					cols[col] = true;
 					invalidPaths++;
 					break;
 				}
 			}
-			won = row == 4 && !cols[col];
+			won = row == 0 && !cols[col];
 		}
 		
 		// Check row where token was inserted
@@ -153,7 +159,7 @@ public class game {
 			return false;
 		}
 		int row = 3;
-		while (board[row][col] != 0) row--;  // Get the row for the token.
+		while (row >= 0 && board[row][col] != 0) row--;  // Get the row for the token.
 		if (row != -1) {  // There is a row for the token.
 			board[row][col] = currPlayer;
 			updateBooleans(row, col, currPlayer);
@@ -173,7 +179,7 @@ public class game {
 			}
 			System.out.println();
 		}
-		System.out.print("+--------");
+		System.out.print("+--------\n");
 	}
 	
 	/**
